@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0a0b19">
+<title>Search growth plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&family=Outfit:wght@500;600;700&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../deck.css">
+<style>
+*{box-sizing:border-box}html,body{margin:0;background:#0a0b19;color:#f3f4ff;font:16px/1.5 "Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+html{scroll-snap-type:y proximity}.sl{scroll-snap-align:center}
+.bar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);display:flex;gap:8px;z-index:10;background:rgba(17,19,42,.88);backdrop-filter:blur(12px);border:1px solid #2a2e58;border-radius:99px;padding:6px;box-shadow:0 10px 40px rgba(0,0,0,.5)}
+.bar a,.bar button{border:0;background:transparent;color:#b3b7e0;font:600 13.5px "Instrument Sans",sans-serif;padding:9px 16px;border-radius:99px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.bar .go{background:#ffc13b;color:#16130a}
+.msg{min-height:80vh;display:grid;place-items:center;text-align:center;padding:30px;color:#7a7fae}
+.msg b{display:block;font:800 26px "Unbounded",sans-serif;color:#f3f4ff;margin-bottom:8px}
+.prog{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#ffc13b,#ff4fa8);z-index:11;width:0}
+body.t-google{background:#f1f3f4;color:#202124;font-family:Roboto,system-ui,sans-serif}
+body.t-google .bar{background:rgba(255,255,255,.92);border-color:#dadce0;box-shadow:0 2px 12px rgba(60,64,67,.2)}
+body.t-google .bar a,body.t-google .bar button{color:#3c4043;font-family:Roboto,sans-serif;font-weight:500}
+body.t-google .bar .go{background:#1a73e8;color:#fff}
+body.t-google .prog{background:linear-gradient(90deg,#4285f4 0 25%,#ea4335 25% 50%,#fbbc05 50% 75%,#34a853 75%)}
+body.t-google .msg b{color:#202124}
+@media print{.bar,.prog{display:none}}
+</style>
+</head>
+<body>
+<div class="prog" id="prog"></div>
+<main id="deck"><div class="msg"><div><b>Loading…</b></div></div></main>
+<div class="bar" id="bar" style="display:none"><button onclick="window.print()">Save PDF</button><a class="go" id="cta" target="_blank" rel="noopener">Book a call</a></div>
+<script src="../../demo/demo.js"></script>
+<script src="../deck.js"></script>
+<script>
+(async () => {
+  const id = new URLSearchParams(location.search).get("id") || "";
+  const el = document.getElementById("deck");
+  try {
+    let v;
+    if (window.DEMO) v = await DEMO.api("deck");
+    else { const r = await fetch("../api.php?a=deck&id=" + encodeURIComponent(id), { cache: "no-store" }); v = await r.json(); if (!r.ok || v.error) throw new Error(v.error || "This link isn't available."); }
+    document.title = (v.prospect.business || v.prospect.domain) + " · search growth plan · " + v.agency.name;
+    document.body.classList.add("t-" + DK.themeOf(v)); document.querySelector('meta[name="theme-color"]').content = DK.themeOf(v) === "google" ? "#f1f3f4" : "#0a0b19";
+    DK.render(v, el);
+    const cta = document.getElementById("cta"); cta.href = v.agency.booking; cta.textContent = v.agency.bookingLabel || "Book a call";
+    document.getElementById("bar").style.display = "";
+    addEventListener("scroll", () => { const h = document.documentElement.scrollHeight - innerHeight; document.getElementById("prog").style.width = (h > 0 ? 100 * scrollY / h : 0) + "%"; }, { passive: true });
+  } catch (e) { el.innerHTML = `<div class="msg"><div><b>Link not available</b>${DK.esc(e.message)}</div></div>`; }
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+[
+ {
+  "file": "examples/optimizationtheory-seo-consultant.json",
+  "domain": "optimizationtheory.com",
+  "keyword": "seo consultant",
+  "location": "United States",
+  "date": "2026-10-18T21:42:58.132Z",
+  "headline": "$219K/mo on the table"
+ },
+ {
+  "file": "examples/dronediaries-drone-photography-ny.json",
+  "domain": "dronediari.es",
+  "keyword": "drone photography",
+  "location": "New York",
+  "date": "2026-10-18T20:49:52.074Z",
+  "headline": "$4.3K/mo on the table"
+ },
+ {
+  "file": "examples/vuss-io.json",
+  "domain": "vuss.io",
+  "keyword": "",
+  "location": "United States",
+  "date": "2026-10-18T20:50:41.735Z",
+  "headline": "$8.1K/mo on the table"
+ }
+]

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Rate card · Pitch Deck Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0b19;--bg2:#0d0f24;--panel:#11132a;--line:#1d2044;--line2:#2a2e58;--ink:#f3f4ff;--muted:#b3b7e0;--dim:#7a7fae;--gold:#ffc13b;--green:#3ee98a;--red:#ff5d6c}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Instrument Sans",system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 20px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;position:sticky;top:0;background:rgba(10,11,25,.92);backdrop-filter:blur(10px);padding:14px 0;z-index:5;border-bottom:1px solid var(--line)}
+h1{font:800 26px "Unbounded",sans-serif;margin:0}
+h2{font:600 12px "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:28px 0 10px}
+.card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line2);border-radius:16px;padding:18px}
+.g{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.g .w2{grid-column:span 2}.g .w3{grid-column:1/-1}
+label{display:block;font:600 10.5px "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-bottom:5px}
+input,select,textarea{width:100%;background:#0d0f24;border:1px solid var(--line2);border-radius:9px;padding:9px 10px;outline:none}
+input:focus,textarea:focus,select:focus{border-color:var(--gold)}
+textarea{min-height:70px;resize:vertical}
+table{width:100%;border-collapse:collapse}td,th{padding:6px 5px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+th{font:600 10.5px "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+td input,td select,td textarea{padding:6px 7px;font-size:13.5px}td textarea{min-height:56px}
+.n{width:90px}
+.btn{border:1px solid var(--line2);background:#171a37;border-radius:10px;padding:9px 15px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--ink)}.btn.p{background:var(--gold);border-color:var(--gold);color:#16130a}
+.x{background:none;border:0;color:var(--dim);cursor:pointer;font-size:18px}
+.hint{color:var(--dim);font-size:13px;margin:6px 0 0}
+.ok{color:var(--green)}.bad{color:var(--red)}
+@media(max-width:760px){.g{grid-template-columns:1fr}.g .w2{grid-column:auto}.tw{overflow-x:auto}table{min-width:720px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div><a href="../" style="color:var(--dim);text-decoration:none">◂ Pitch decks</a><h1>Your rate card</h1></div><div style="display:flex;gap:8px;align-items:center"><span id="st" class="hint"></span><button class="btn" onclick="resetDefaults()">Reset to defaults</button><button class="btn p" onclick="save()">Save</button></div></div>
+
+  <h2>Agency</h2>
+  <div class="card g">
+    <div><label>Agency name</label><input data-a="name"></div><div><label>Your name</label><input data-a="person"></div><div><label>Title</label><input data-a="title"></div>
+    <div><label>Email</label><input data-a="email"></div><div><label>Phone</label><input data-a="phone"></div><div><label>Website</label><input data-a="site"></div>
+    <div class="w2"><label>Booking link (last slide)</label><input data-a="booking"></div><div><label>Button label</label><input data-a="bookingLabel"></div>
+    <div class="w3"><label>Logo URL (optional)</label><input data-a="logo" placeholder="https://optimizationtheory.com/wp-content/uploads/logo.png"></div>
+    <div class="w3"><label>Bio (why-us slide)</label><textarea data-a="bio"></textarea></div>
+    <div class="w3"><label>Proof points (one per line, up to 4)</label><textarea data-a="proof"></textarea></div>
+  </div>
+
+  <h2>Pricing rules</h2>
+  <div class="card g">
+    <div><label>Hourly rate ($)</label><input type="number" id="hourly"></div><div><label>Minimum project ($)</label><input type="number" id="minimum"></div><div><label>Round one-time totals up to ($)</label><input type="number" id="roundTo"></div>
+    <div><label>Deck style</label><select id="theme"><option value="google">Google colors (light)</option><option value="night">Night (dark)</option></select></div>
+    <div><label>Visit → lead rate (%)</label><input type="number" step="0.1" id="leadRate"></div><div><label>Value per lead ($, optional)</label><input type="number" id="leadValue"></div>
+  </div>
+
+  <h2>Task library</h2>
+  <div class="card tw"><table id="tasks"></table><p class="hint">Price wins when set. Otherwise the line costs hours × your hourly rate. Unit "fixed" means one per plan; other units multiply by the quantity the tool finds (pages, links, posts). The ids are what the plan builder looks for, so keep them.</p><button class="btn" onclick="addTask()">+ Add task</button></div>
+
+  <h2>Monthly plans</h2>
+  <div class="card tw"><table id="tiers"></table><p class="hint">Track: seo, local or ai. The plan builder picks the one that fits the budget hint and the size of the gap; you can change it in the editor.</p><button class="btn" onclick="addTier()">+ Add plan</button></div>
+</div>
+<script src="../../demo/demo.js"></script>
+<script src="../rates.js"></script>
+<script>
+const $ = s => document.querySelector(s), esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+let R = JSON.parse(JSON.stringify(DEFAULT_RATES)), NONCE = "";
+const CATS = ["technical", "content", "local", "ai", "links", "tracking"], UNITS = ["fixed", "page", "each", "post", "link"], TRACKS = ["seo", "local", "ai"];
+function fill() {
+  document.querySelectorAll("[data-a]").forEach(el => { const v = R.agency[el.dataset.a]; el.value = Array.isArray(v) ? v.join("\n") : (v || ""); });
+  $("#theme").value = R.theme || "google"; $("#hourly").value = R.hourly; $("#minimum").value = R.minimum; $("#roundTo").value = R.roundTo; $("#leadRate").value = +(R.roi.leadRate * 100).toFixed(2); $("#leadValue").value = R.roi.leadValue || "";
+  $("#tasks").innerHTML = `<tr><th>Id</th><th>Name</th><th>Type</th><th>Unit</th><th>Price $</th><th>Hours</th><th></th></tr>` + R.tasks.map((t, i) => `<tr data-i="${i}"><td><input data-k="id" value="${esc(t.id)}" class="n" style="width:110px"></td><td><input data-k="name" value="${esc(t.name)}"></td><td><select data-k="cat">${CATS.map(c => `<option ${c === t.cat ? "selected" : ""}>${c}</option>`).join("")}</select></td><td><select data-k="unit">${UNITS.map(c => `<option ${c === t.unit ? "selected" : ""}>${c}</option>`).join("")}</select></td><td><input data-k="price" type="number" class="n" value="${t.price ?? ""}"></td><td><input data-k="hours" type="number" step="0.05" class="n" value="${t.hours ?? ""}"></td><td><button class="x" onclick="R.tasks.splice(${i},1);fill()">×</button></td></tr>`).join("");
+  $("#tiers").innerHTML = `<tr><th>Id</th><th>Name</th><th>Track</th><th>$ / month</th><th>Includes (one per line)</th><th></th></tr>` + R.tiers.map((t, i) => `<tr data-i="${i}"><td><input data-k="id" value="${esc(t.id)}" style="width:110px"></td><td><input data-k="name" value="${esc(t.name)}"></td><td><select data-k="track">${TRACKS.map(c => `<option ${c === t.track ? "selected" : ""}>${c}</option>`).join("")}</select></td><td><input data-k="price" type="number" class="n" value="${t.price}"></td><td><textarea data-k="includes">${esc((t.includes || []).join("\n"))}</textarea></td><td><button class="x" onclick="R.tiers.splice(${i},1);fill()">×</button></td></tr>`).join("");
+}
+function read() {
+  document.querySelectorAll("[data-a]").forEach(el => { R.agency[el.dataset.a] = el.dataset.a === "proof" ? el.value.split("\n").map(s => s.trim()).filter(Boolean).slice(0, 4) : el.value.trim(); });
+  R.theme = $("#theme").value; R.hourly = +$("#hourly").value || 0; R.minimum = +$("#minimum").value || 0; R.roundTo = +$("#roundTo").value || 1;
+  R.roi = { ...R.roi, leadRate: (+$("#leadRate").value || 0) / 100, leadValue: +$("#leadValue").value || 0 };
+  document.querySelectorAll("#tasks tr[data-i]").forEach(tr => { const t = R.tasks[+tr.dataset.i]; tr.querySelectorAll("[data-k]").forEach(el => { const k = el.dataset.k; t[k] = (k === "price" || k === "hours") ? (el.value === "" ? null : +el.value) : el.value.trim(); }); if (t.price == null) delete t.price; if (t.hours == null) delete t.hours; });
+  document.querySelectorAll("#tiers tr[data-i]").forEach(tr => { const t = R.tiers[+tr.dataset.i]; tr.querySelectorAll("[data-k]").forEach(el => { const k = el.dataset.k; t[k] = k === "price" ? +el.value || 0 : k === "includes" ? el.value.split("\n").map(s => s.trim()).filter(Boolean) : el.value.trim(); }); });
+}
+function addTask() { read(); R.tasks.push({ id: "task_" + (R.tasks.length + 1), cat: "content", name: "New task", unit: "fixed", price: 0 }); fill(); }
+function addTier() { read(); R.tiers.push({ id: "plan_" + (R.tiers.length + 1), track: "seo", name: "New plan", price: 0, includes: [] }); fill(); }
+function resetDefaults() { if (confirm("Replace this rate card with the defaults from your rates page?")) { R = JSON.parse(JSON.stringify(DEFAULT_RATES)); fill(); } }
+async function save() {
+  read();
+  if (window.DEMO) { $("#st").className = "hint"; $("#st").textContent = "Demo: the rate card isn't saved"; return; }
+  const r = await fetch("../api.php?a=rates", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json", "X-OT-Nonce": NONCE }, body: JSON.stringify({ rates: R }) }).then(r => r.json()).catch(e => ({ error: e.message }));
+  $("#st").className = "hint " + (r.ok ? "ok" : "bad"); $("#st").textContent = r.ok ? "Saved ✓" : "Not saved: " + (r.error || "error");
+}
+(async () => {
+  if (window.DEMO) { const r = await DEMO.api("rates"); if (r.rates && r.rates.tasks) R = r.rates; fill(); $("#st").textContent = "Demo · read-only"; document.querySelector('a[href="../"]').href = "../?demo=1"; return; }
+  try {
+    const h = await fetch("../api.php?a=health", { credentials: "same-origin", cache: "no-store" }).then(r => r.json());
+    if (h.mode !== "local") { $("#st").className = "hint bad"; $("#st").innerHTML = h.login ? `<a href="${esc(h.login)}" style="color:var(--gold)">Log in</a> to save` : "Log in to save"; }
+    NONCE = h.nonce || "";
+    const r = await fetch("../api.php?a=rates", { credentials: "same-origin", cache: "no-store" }).then(r => r.json());
+    if (r.rates && r.rates.tasks) R = r.rates;
+  } catch (e) { }
+  fill();
+})();
+</script>
+</body>
+</html>

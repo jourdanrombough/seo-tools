@@ -1,0 +1,7 @@
+tools/_data/
+tools/_core/local-config.php
+.DS_Store
+recordings/
+*.jsonl
+dev-server.log
+scripts/__pycache__/
