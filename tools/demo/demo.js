@@ -41,9 +41,17 @@ window.DEMO = (() => {
       case "balance": return { balance: null };
       case "rates": return body ? { ok: false, error: "Demo mode: changes aren't saved" } : { rates: tape.rates || null };
       case "dfs": case "ai": {
-        const name = n === "dfs" ? body.endpoint : body.task, c = find(n, name, JSON.stringify(body));
+        const name = n === "dfs" ? body.endpoint : body.task;
+        // crawl progress: skip the minutes of polling and show the finished crawl after a short wait
+        if (n === "dfs" && /^on_page\/summary\//.test(name)) {
+          const all = byName["dfs|on_page/summary"] || [], c = all[all.length - 1];
+          await sleep(4000);
+          if (!c) return { status_code: 0, status_message: "Not in the demo recording", cost: 0, result: null };
+          const out = clone(c.res); out._last = true; return out;
+        }
+        const c = find(n, name, JSON.stringify(body));
         if (!c) return n === "dfs" ? { status_code: 0, status_message: "Not in the demo recording", cost: 0, result: null } : { ok: false, error: "Not in the demo recording" };
-        await sleep(Math.min(n === "ai" ? 5 : 3.5, Math.max(.3, +(c.res.seconds || 1))) * 1000);
+        await sleep(Math.min(n === "ai" ? 3.2 : 1.5, Math.max(.25, +(c.res.seconds || 1) * .5)) * 1000);
         const out = clone(c.res); if (c.last) out._last = true; return out;
       }
       case "save": {

@@ -146,7 +146,7 @@ async function build() {
     const CR = DECK.research.crawl;
     if (CR) feed(`<h4>Site health · ${esc(CR.source)}${CR.partial ? " (partial)" : ""}</h4><div class="row"><span>Health score · ${fmt(CR.pages)} pages</span><b class="${CR.score >= 80 ? "y" : CR.score >= 60 ? "m" : "n"}">${CR.score}/100</b></div>${CR.issues.slice(0, 4).map(i => `<div class="row"><span>${esc(i.label)}</span><b>${fmt(i.count)}</b></div>`).join("")}`); else skip.push("crawl");
 
-    done.push("crawl"); await sleep(400);
+    done.push("crawl"); await sleep(window.DEMO ? 250 : 400);
     // 5. items
     stepsUI("items", done, skip);
     DECK.items = buildItems(); await sleep(500);
@@ -191,7 +191,9 @@ async function finishCrawl() {
     await sleep(window.DEMO ? 1200 : 6000);
   }
   if (!last || !(last.crawl_status && last.crawl_status.pages_crawled)) { feed(`<h4>Site crawl</h4><div class="row"><span>The crawl didn't return pages in time</span><span class="m">skipped</span></div>`); return null; }
-  return crawlFromSummary(last, T.n);
+  const c = crawlFromSummary(last, T.n);
+  if (window.DEMO) { c.source = "Sample crawl"; c.partial = false; }
+  return c;
 }
 
 function runScan() {

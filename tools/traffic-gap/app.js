@@ -280,7 +280,8 @@ async function startScan() {
       stepUI(s.id);
       await RUN[s.id]();
       const el = performance.now() - ts;
-      if (el < s.min * 1000) await sleep(s.min * 1000 - el);
+      const minMs = s.min * 1000;
+      if (el < minMs) await sleep(minMs - el);
       SCAN.durations[s.id] = +((performance.now() - ts) / 1000).toFixed(2);
       if (s.id === "foot" && !SCAN.ranked.length && !SCAN.overview) throw new Error("No data came back for " + domain + ". Check the domain and your API connection.");
       if ((s.id === "market" || s.id === "filter") && !SCAN.universe.length) throw new Error("Couldn't find relevant searches for this market. Try a different target keyword.");
@@ -291,7 +292,7 @@ async function startScan() {
   SCAN_ID = null;
   try { const j = await api("save", { kind: "scans", data: SCAN }); if (j.id) { SCAN_ID = j.id; if (!EMBED) location.hash = "show=scan:" + j.id; } } catch (e) { }
   finishOverlay();
-  if (EMBED) { await sleep(2600); postDigest(); }
+  if (EMBED) { await sleep(window.DEMO ? 900 : 2600); postDigest(); }
 }
 
 function parseKw(map, k, info, props, intent, seed) {
