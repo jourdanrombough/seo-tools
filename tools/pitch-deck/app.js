@@ -52,6 +52,7 @@ async function boot() {
   ["#fCc", "#fSt", "#fReuse", "#fCrawlN"].forEach(s => $(s).addEventListener("change", estimate));
   try {
     const h = await api("health");
+    if (h.mode === "local" && h.setup && !window.DEMO) { location.replace("../setup/"); return; } // no keys yet: first-run screen
     if (h.mode === "local") { MODE = "local"; NONCE = h.nonce || ""; CLAUDE = !!(h.keys && h.keys.claude); }
     else LOGIN = h.login;
   } catch (e) { }
@@ -531,6 +532,7 @@ async function publish() {
   const r = await api("publish", { id: DECK.id });
   if (!r.token) return toast("Couldn't publish: " + (r.error || "error"));
   DECK.token = r.token; DECK.status = "published"; DIRTY = false; pubBox(); copyLink();
+  if (r.local) toast("Published in this browser only. To send it, use PowerPoint or PDF.");
 }
 async function unpublish() { await api("unpublish", { id: DECK.id }); DECK.status = "draft"; pubBox(); toast("Link turned off"); }
 function copyLink() { const u = deckUrl(); (navigator.share && /Mobi/.test(navigator.userAgent) ? navigator.share({ title: DECK.input.business + " search plan", url: u }) : navigator.clipboard.writeText(u)).then(() => toast("Link copied"), () => { }); }

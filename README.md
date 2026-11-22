@@ -68,10 +68,32 @@ Re-running anything within 7 days is free (cached). Reusing a saved scan in the 
 ## Run it on your Mac (no PHP needed)
 
 ```bash
-python3 dev-server.py            # reads ~/DataForSEO/.env, opens http://localhost:8777/tools/
+python3 dev-server.py            # reads .env here or ~/DataForSEO/.env, opens http://localhost:8777/tools/
 ```
 
 Or double-click `Start SEO Tools.command`. `.env` needs `DATAFORSEO_LOGIN`, `DATAFORSEO_PASSWORD` and `ANTHROPIC_API_KEY`.
+
+## The web version (nothing to install)
+
+On GitHub Pages the tools run entirely in the visitor's browser: `https://jourdanrombough.github.io/seo-tools/tools/pitch-deck/`. There is no server. `tools/browser/browser.js` answers every `api.php` request the pages make, calls DataForSEO and the Claude API straight from the browser, and keeps everything on the visitor's side:
+
+- **Keys** are tested on the first-run screen (`/tools/setup/`) and saved in that browser's own storage. They go only to `api.dataforseo.com` and `api.anthropic.com`.
+- **Decks, scans, the rate card and the 7-day cache** are saved in that browser (IndexedDB). The setup screen has backup, restore and "forget my keys".
+- **The rate card** starts as the sample in `tools/browser/sample-rates.js`, never yours.
+- **A published link** only opens in the browser that made it. PowerPoint and PDF are how a deck gets sent.
+- Same daily caps as everywhere else: $10 of DataForSEO and $3 of Claude.
+
+Browser mode switches on by itself on `*.github.io`. Anywhere else, add `?browser=1` to try it. The demo is unchanged and still starts with `?demo=1`. Your site (PHP) and your Mac (`dev-server.py`) are untouched: with a backend present, `browser.js` does nothing.
+
+To check it without keys: `python3 -m http.server 8770`, open `http://localhost:8770/tools/pitch-deck/?browser=1`.
+
+## The public download (other people's computers)
+
+`python3 scripts/build-public-zip.py` builds `claudinox-seo-pitch-deck-generator.zip`: the same tools with a sample rate card in place of yours (`scripts/public/rates.public.js`), start files for Mac and Windows, and no keys or saved data. The build stops if it finds a key or your email or phone where they should not be.
+
+On a first start with no keys, the server opens `/tools/setup/`. That screen tests the DataForSEO login and the Claude key, then saves them to a `.env` file next to `dev-server.py` (ignored by git). Your own Mac keeps working as before: with no `.env` in this folder the server still reads `~/DataForSEO/.env`.
+
+To publish it, attach the zip to a GitHub release. The setup page on optimizationtheory.com downloads `releases/latest/download/claudinox-seo-pitch-deck-generator.zip`, so each new release is picked up without touching the site.
 
 ## How it fits together
 

@@ -3,8 +3,15 @@
    is called and nothing costs money. Saved decks and published links stay in this browser. */
 window.DEMO = (() => {
   const q = new URLSearchParams(location.search);
-  // on GitHub Pages there is no backend, so every page runs as the demo
-  if (q.get("demo") !== "1" && !/\.github\.io$/.test(location.hostname)) return null;
+  // ?demo=1 starts the demo and it stays on while you move between the tools in this tab.
+  // ?demo=0, or arriving from another site, ends it. Without the demo, a static host runs browser mode (tools/browser/browser.js).
+  let on = q.get("demo") === "1";
+  try {
+    const outside = document.referrer && new URL(document.referrer).origin !== location.origin;
+    if (q.get("demo") === "0" || (!on && outside)) sessionStorage.removeItem("ot_demo");
+    if (on) sessionStorage.setItem("ot_demo", "1"); else on = q.get("demo") !== "0" && sessionStorage.getItem("ot_demo") === "1";
+  } catch (e) { }
+  if (!on) return null;
   const here = document.currentScript ? new URL(".", document.currentScript.src).href : "../demo/";
   let tape = null, byKey = null, byName = null;
   const mem = { decks: {}, scans: {} };
@@ -78,4 +85,12 @@ window.DEMO = (() => {
   }
   return { api, load, get tape() { return tape; } };
 })();
-if (window.DEMO) document.documentElement.classList.add("is-demo");
+if (window.DEMO) {
+  document.documentElement.classList.add("is-demo");
+  // on a static host the real tool is one click away: it runs in the browser with the visitor's own keys
+  if (/\.github\.io$/.test(location.hostname) || location.protocol === "file:") addEventListener("DOMContentLoaded", () => {
+    const band = document.querySelector(".demo-band"); if (!band) return;
+    const a = document.createElement("a"); a.href = location.pathname + "?demo=0"; a.textContent = "Use it with your own keys ▸"; a.style.cssText = "color:#ffc13b;font-weight:600";
+    band.appendChild(a);
+  });
+}

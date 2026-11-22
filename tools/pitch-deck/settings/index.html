@@ -61,6 +61,8 @@ td input,td select,td textarea{padding:6px 7px;font-size:13.5px}td textarea{min-
 </div>
 <script src="../../demo/demo.js"></script>
 <script src="../rates.js"></script>
+<script src="../../browser/sample-rates.js"></script>
+<script src="../../browser/browser.js"></script>
 <script>
 const $ = s => document.querySelector(s), esc = s => String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 let R = JSON.parse(JSON.stringify(DEFAULT_RATES)), NONCE = "";

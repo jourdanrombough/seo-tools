@@ -81,7 +81,7 @@ async function api(n, body, q) {
 }
 async function detectMode() {
   if (location.protocol.startsWith("http")) {
-    try { const j = await api("health"); HEALTH = j; if (j.mode === "local") { MODE = "local"; NONCE = j.nonce || ""; CLAUDE = !!(j.keys && j.keys.claude); } else if (j.login) LOGIN_URL = j.login; } catch (e) { }
+    try { const j = await api("health"); HEALTH = j; if (j.mode === "local" && j.setup) { location.replace("../setup/"); return; } if (j.mode === "local") { MODE = "local"; NONCE = j.nonce || ""; CLAUDE = !!(j.keys && j.keys.claude); } else if (j.login) LOGIN_URL = j.login; } catch (e) { }
   }
   renderMode();
 }
