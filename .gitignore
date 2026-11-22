@@ -5,3 +5,4 @@ recordings/
 *.jsonl
 dev-server.log
 scripts/__pycache__/
+.env

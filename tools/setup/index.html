@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#0a0b19">
+<title>Connect your keys | SEO tools</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700;800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0b19;--panel:#11132a;--bg2:#0d0f24;--line:#2a2e58;--ink:#f3f4ff;--muted:#b3b7e0;--dim:#7a7fae;--gold:#ffc13b;--green:#3ee98a;--red:#ff6b81;--cyan:#2fd0ff;--disp:"Unbounded",system-ui,sans-serif;--body:"Instrument Sans",system-ui,sans-serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{min-height:100vh;background:radial-gradient(900px 500px at 85% -10%,rgba(155,140,255,.16),transparent 60%),radial-gradient(700px 500px at -10% 100%,rgba(255,193,59,.1),transparent 60%),var(--bg);color:var(--ink);font:16px/1.5 var(--body);-webkit-font-smoothing:antialiased;padding:34px 16px 60px}
+a{color:var(--cyan)}
+button,input{font:inherit;color:inherit}
+.w{max-width:760px;margin:0 auto}
+.e{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+h1{font:800 clamp(30px,6vw,46px)/1.06 var(--disp);letter-spacing:-.03em;margin:10px 0 12px}
+h1 span{color:var(--gold)}
+.lede{color:var(--muted);font-size:17px;margin:0 0 26px;max-width:640px}
+.card{background:linear-gradient(180deg,var(--panel),var(--bg2));border:1px solid var(--line);border-radius:18px;padding:22px;margin-bottom:16px;transition:border-color .2s}
+.card.ok{border-color:rgba(62,233,138,.55)}.card.bad{border-color:rgba(255,107,129,.6)}
+.hd{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.hd i{flex:none;width:34px;height:34px;border-radius:10px;display:grid;place-items:center;font:800 14px var(--disp);font-style:normal;color:#16130a;background:linear-gradient(135deg,#3ee98a,#2fd0ff)}
+.card.c2 .hd i{background:linear-gradient(135deg,#ffc13b,#ff4fa8)}
+.hd b{font:700 18px var(--disp);letter-spacing:-.01em}
+.hd em{margin-left:auto;font:600 11px var(--mono);font-style:normal;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);border-radius:999px;padding:4px 9px;white-space:nowrap}
+.how{color:var(--muted);font-size:14.5px;margin:0 0 16px}
+.how b{color:var(--ink);font-weight:600}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
+.in{position:relative}
+input{width:100%;background:#0b0d20;border:1px solid var(--line);border-radius:11px;padding:12px 13px;font-size:15px;outline:none}
+input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,193,59,.15)}
+.in input[type=password],.in input.pw{padding-right:62px}
+.eye{position:absolute;right:6px;top:6px;bottom:6px;border:0;background:#1a1d3c;border-radius:8px;padding:0 10px;font:600 11px var(--mono);color:var(--muted);cursor:pointer}
+.st{min-height:22px;margin:12px 0 0;font-size:14.5px;color:var(--muted)}
+.st.ok{color:var(--green)}.st.bad{color:var(--red)}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:6px}
+.btn{border:1px solid var(--line);background:#161938;border-radius:12px;padding:13px 20px;font-weight:600;cursor:pointer;text-decoration:none;color:var(--ink);display:inline-flex;align-items:center;gap:8px;transition:.15s}
+.btn:hover{border-color:var(--dim)}
+.btn.p{background:var(--gold);border-color:var(--gold);color:#16130a;font-weight:700}
+.btn.p:hover{filter:brightness(1.07)}
+.btn:disabled{opacity:.55;cursor:default}
+.spin{width:15px;height:15px;border-radius:50%;border:2.5px solid rgba(22,19,10,.3);border-top-color:#16130a;animation:sp .7s linear infinite;display:none}
+.busy .spin{display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+.safe{color:var(--dim);font-size:13.5px;margin:18px 0 0}
+.safe code{font:400 12.5px var(--mono);color:var(--muted);word-break:break-all}
+.next{display:none;margin-top:26px}
+.next.on{display:block}
+.next h2{font:700 22px var(--disp);letter-spacing:-.02em;margin:0 0 14px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.steps a{display:block;text-decoration:none;color:inherit;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;transition:.2s}
+.steps a:hover{border-color:var(--gold);transform:translateY(-2px)}
+.steps a.main{border-color:var(--gold)}
+.steps small{display:block;font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.steps b{display:block;font-weight:700;margin-bottom:4px}
+.steps span{color:var(--muted);font-size:14px}
+.rem{display:none;align-items:center;gap:9px;margin:2px 0 14px;font:400 15px var(--body);letter-spacing:0;text-transform:none;color:var(--muted);cursor:pointer}
+.rem input{width:auto;accent-color:var(--gold);padding:0}
+#dataCard{display:none;margin-top:26px}
+.note{display:none;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;color:var(--muted)}
+@media(max-width:640px){.g,.steps{grid-template-columns:1fr}.hd em{display:none}}
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="e">First run · two keys</div>
+  <h1>Connect <span>your keys.</span></h1>
+  <p class="lede">The tools pull live search data from DataForSEO and write with Claude. Paste your own keys once. They are tested, then saved on this computer.</p>
+
+  <div class="note" id="remote">This page is for the copy of the tools that runs on your own computer. On a website the keys live in <code>wp-config.php</code> on the server.</div>
+
+  <form id="f" autocomplete="off">
+    <div class="card c1" id="cDfs">
+      <div class="hd"><i>1</i><b>DataForSEO</b><em>required</em></div>
+      <p class="how">Sign in at <a href="https://app.dataforseo.com/api-access" target="_blank" rel="noopener">app.dataforseo.com/api-access</a> and copy the <b>API login</b> and <b>API password</b>. The API password is made for you by DataForSEO. It is not the password you sign in with.</p>
+      <div class="g">
+        <div><label for="login">API login</label><div class="in"><input id="login" name="ot-dfs-login" inputmode="email" spellcheck="false" autocapitalize="off" placeholder="you@youragency.com"></div></div>
+        <div><label for="password">API password</label><div class="in"><input id="password" name="ot-dfs-password" type="password" spellcheck="false" autocomplete="new-password" placeholder="16 characters"><button type="button" class="eye" data-for="password">show</button></div></div>
+      </div>
+      <p class="st" id="sDfs"></p>
+    </div>
+
+    <div class="card c2" id="cCl">
+      <div class="hd"><i>2</i><b>Claude</b><em>recommended</em></div>
+      <p class="how">Sign in at <a href="https://platform.claude.com/settings/keys" target="_blank" rel="noopener">platform.claude.com</a>, open <b>Settings</b>, then <b>API keys</b>, and choose <b>Create key</b>. The account needs credits (Settings, then Billing). Leave this blank and the tools fall back to their backup AI.</p>
+      <label for="anthropic">API key</label>
+      <div class="in"><input id="anthropic" name="ot-claude-key" type="password" spellcheck="false" autocomplete="new-password" placeholder="sk-ant-..."><button type="button" class="eye" data-for="anthropic">show</button></div>
+      <p class="st" id="sCl"></p>
+    </div>
+
+    <label class="rem" id="remWrap"><input type="checkbox" id="remember" checked> Remember my keys in this browser</label>
+    <div class="row">
+      <button class="btn p" id="go" type="submit"><span class="spin"></span><span id="goT">Test and save</span></button>
+      <a class="btn" href="../demo/">Watch a recorded run first</a>
+    </div>
+    <p class="st bad" id="sSave"></p>
+  </form>
+
+  <p class="safe" id="safe">Your keys are written to <code id="file">.env</code> on this computer and nowhere else. This page only talks to the small server running in the window you just opened. That server sends your keys to DataForSEO and Claude when it asks them for data, and to nobody else.</p>
+
+  <div class="card" id="dataCard">
+    <div class="hd"><i>3</i><b>Your data</b><em>this browser</em></div>
+    <p class="how">Your decks, scans and rate card are saved in this browser. Clearing your browser data removes them, so keep a backup. The backup never includes your keys.</p>
+    <div class="row"><button type="button" class="btn" id="bk">Download a backup</button><button type="button" class="btn" id="rs">Restore a backup</button><button type="button" class="btn" id="fg">Forget my keys</button><input type="file" id="rsFile" accept="application/json,.json" style="display:none"></div>
+    <p class="st" id="sData"></p>
+  </div>
+
+  <div class="next" id="next">
+    <h2>You're connected. Next:</h2>
+    <div class="steps">
+      <a class="main" href="../pitch-deck/settings/"><small>Step 1</small><b>Set your rate card</b><span>Your name, logo and prices. Every plan is priced from it.</span></a>
+      <a href="../pitch-deck/"><small>Step 2</small><b>Build your first deck</b><span>Try your own domain. About two minutes.</span></a>
+      <a href="../traffic-gap/"><small>Or</small><b>Run a traffic gap scan</b><span>A domain in, the missing traffic out. About a minute.</span></a>
+    </div>
+  </div>
+</div>
+<script src="../browser/browser.js"></script>
+<script>
+const $ = s => document.querySelector(s);
+const api = (body) => fetch("../pitch-deck/api.php?a=setup", body ? { method: "POST", cache: "no-store", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) } : { cache: "no-store" }).then(r => r.json());
+const money = n => n == null ? "" : " · balance $" + Number(n).toFixed(2);
+function st(id, card, cls, msg) { const e = $(id); e.className = "st " + cls; e.textContent = msg; if (card) $(card).className = $(card).className.replace(/ (ok|bad)$/, "") + (cls ? " " + cls : ""); }
+function done() { $("#next").classList.add("on"); $("#goT").textContent = "Test and save again"; }
+
+document.querySelectorAll(".eye").forEach(b => b.onclick = () => { const i = $("#" + b.dataset.for), show = i.type === "password"; i.type = show ? "text" : "password"; i.classList.toggle("pw", show); b.textContent = show ? "hide" : "show"; });
+
+$("#f").addEventListener("submit", async e => {
+  e.preventDefault();
+  const go = $("#go"); go.disabled = true; go.classList.add("busy"); $("#goT").textContent = "Testing your keys…";
+  st("#sDfs", "#cDfs", "", "Testing…"); st("#sCl", "#cCl", "", $("#anthropic").value.trim() || SAVED.claude ? "Testing…" : ""); $("#sSave").textContent = "";
+  let r;
+  try { r = await api({ login: $("#login").value, password: $("#password").value, anthropic: $("#anthropic").value, remember: $("#remember").checked }); }
+  catch (er) { r = { ok: false, errors: { save: "The tool's window was closed, so there is nothing to talk to. Start the tool again and reload this page." } }; }
+  go.disabled = false; go.classList.remove("busy");
+  const er = r.errors || {};
+  if (er.dataforseo) st("#sDfs", "#cDfs", "bad", "✕ " + er.dataforseo); else if (r.ok) st("#sDfs", "#cDfs", "ok", "✓ Connected" + money(r.balance)); else st("#sDfs", "#cDfs", "", "");
+  if (er.claude) st("#sCl", "#cCl", "bad", "✕ " + er.claude); else if (r.ok) st("#sCl", "#cCl", r.claude ? "ok" : "", r.claude ? "✓ Key accepted" : "No Claude key. The tools will use their backup AI."); else st("#sCl", "#cCl", "", "");
+  if (er.save) $("#sSave").textContent = er.save;
+  if (r.ok) { SAVED = { dataforseo: true, claude: r.claude }; if (r.file && $("#file")) $("#file").textContent = r.file; $("#password").value = ""; $("#anthropic").value = ""; hints(); done(); }
+  else $("#goT").textContent = "Test and save";
+});
+
+/* no server: keys and data live in this browser */
+function browserMode() {
+  $("#remWrap").style.display = "flex"; $("#dataCard").style.display = "block";
+  $("#safe").textContent = "Your keys are saved in this browser, on this computer, and nowhere else. This page sends them straight to DataForSEO and Claude when it asks them for data, and to nobody else. The site that served this page never receives them.";
+  $("#bk").onclick = async () => {
+    const d = await BROWSER.backup(), a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(d)], { type: "application/json" })); a.download = "seo-tools-backup-" + d.saved.slice(0, 10) + ".json"; a.click();
+    st("#sData", null, "ok", "✓ Backup downloaded: " + d.items.length + " items. Your keys are not in it.");
+  };
+  $("#rs").onclick = () => $("#rsFile").click();
+  $("#rsFile").onchange = async e => {
+    try { const n = await BROWSER.restore(JSON.parse(await e.target.files[0].text())); st("#sData", null, "ok", "✓ Restored " + n + " items."); }
+    catch (er) { st("#sData", null, "bad", "✕ " + (er.message || "That file could not be read.")); }
+    e.target.value = "";
+  };
+  $("#fg").onclick = () => { BROWSER.forgetKeys(); location.reload(); };
+}
+let SAVED = { dataforseo: false, claude: false };
+function hints() {
+  if (SAVED.dataforseo) $("#password").placeholder = "saved · leave blank to keep";
+  if (SAVED.claude) $("#anthropic").placeholder = "saved · leave blank to keep";
+}
+(async () => {
+  let h = null;
+  try { h = await fetch("../pitch-deck/api.php?a=health", { cache: "no-store" }).then(r => r.json()); } catch (e) { }
+  if (!h || h.mode !== "local") { $("#remote").style.display = "block"; $("#f").style.display = "none"; return; }
+  if (h.browser && window.BROWSER) browserMode();
+  try {
+    const s = await api();
+    SAVED = { dataforseo: !!s.dataforseo, claude: !!s.claude };
+    if (s.file && $("#file")) $("#file").textContent = s.file;
+    if (s.dataforseo) { $("#login").placeholder = s.login || "saved"; st("#sDfs", "#cDfs", "ok", "✓ Keys saved on this computer"); }
+    if (s.claude) st("#sCl", "#cCl", "ok", "✓ Key saved on this computer");
+    hints();
+    if (s.dataforseo) done();
+  } catch (e) { }
+})();
+</script>
+</body>
+</html>
